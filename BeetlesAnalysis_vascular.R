@@ -58,10 +58,21 @@ summary(beetles$richness)
 
 #Some missing data
 beetles[is.na(beetles$richness),]
-
 boxplot(beetles$richness~beetles$year_,ylab='Beelte species richness')
 
 
 #VascVegdata
 vascdat<-read.csv('Vascular_2001_to_2015.csv',header=T,sep=',')
+vascdat$vascrichness<-specnumber(vascdat[,11:138])
+boxplot(vascdat$vascrichness~vascdat$Year)
+vascdat$Plot<-as.factor(paste0(substr(vascdat$Plot,1,1),as.integer(substr(vascdat$Plot,2,3))))
+beetles_veg<-merge(beetles,vascdat[,c(1:10,139:152)],by.x=c('plot','year_'),by.y=c('Plot','Year'),all.y=F)
+with(beetles_veg,plot(vascrichness,beetlerichness))
+lm1<-with(beetles_veg,lm(beetlerichness~vascrichness))
+summary(lm1)
+abline(lm1)#Repeated measures
+lm1<-with(beetles_veg[beetles_veg$year_==2003,],lm(beetlerichness~vascrichness))
+summary(lm1)
+lm2<-with(beetles_veg,lm(beetlerichness~vascrichness+Altitude+year_))
+summary(lm2)
 
