@@ -16,6 +16,7 @@ beetles$treatment[beetles$enclosure%in%c('C','D','I')]<-'Low sheep density'
 
 #Check plot numbers
 levels(beetles$plot)#Some plots written in different ways i.e. 'A01' and 'A1'
+<<<<<<< HEAD
 #Clean plot
 beetles$plot<-as.factor(paste0(substr(beetles$plot,1,1),as.integer(substr(beetles$plot,2,3))))
 
@@ -50,4 +51,13 @@ summary(lm1)
 
 lm2<-with(beetles_veg,lm(beetlerichness~vascrichness+Altitude+year_))
 summary(lm2)
+
+#Diversity
+beetles$richness<-specnumber(beetles[,3:75])
+summary(beetles$richness)
+
+#Some missing data
+beetles[is.na(beetles$richness),]
+
+boxplot(beetles$richness~beetles$year_,ylab='Beelte species richness')
 
